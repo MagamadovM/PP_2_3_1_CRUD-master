@@ -1,12 +1,16 @@
 package web.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import web.model.User;
 import web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 
 @Controller
@@ -25,8 +29,8 @@ public class UserController {
 		return "users";
 	}
 
-	@GetMapping("/{id}")
-	public String getUser (@PathVariable("id") int id, Model model) {
+	@GetMapping("/user")
+	public String getUser(@RequestParam("id") long id, Model model) {
 		model.addAttribute("user", userService.getUserById(id));
 		return "user";
 	}
@@ -46,19 +50,13 @@ public class UserController {
 		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String delete(@PathVariable("id") int id) {
-		userService.removeUser(id);
-		return "redirect:/";
-	}
-
-	@GetMapping("edit/{id}")
-	public String updateUser(@PathVariable("id") int id, Model model) {
-		model.addAttribute(userService.getUserById(id));
+	@GetMapping("/edit")
+	public String updateUser(@RequestParam("id") long id, Model model) {
+		model.addAttribute("user", userService.getUserById(id));
 		return "edit";
 	}
 
-	@PatchMapping("/edit")
+	@PostMapping("/edit")
 	public String update(@Valid User user, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return "edit";
@@ -66,5 +64,10 @@ public class UserController {
 			userService.updateUser(user);
 			return "redirect:/";
 		}
+	}
+	@PostMapping("/delete")
+	public String delete(@RequestParam("id") long id) {
+		userService.removeUser(id);
+		return "redirect:/";
 	}
 }

@@ -31,12 +31,14 @@
 </head>
 <body>
 <h1>Edit user</h1>
-<form action="#" th:method="PATCH" th:action="@{/edit}" th:object="${user}">
+<form action="#" method="POST" th:action="@{/edit}" th:object="${user}">
     <table>
         <tr>
             <td>
                 <label for="userId">UserId</label>
                 <input readonly type="number" th:field="*{userId}" id="userId" placeholder="UserId">
+                <!-- Скрытое поле для передачи userId -->
+                <input type="hidden" th:field="*{userId}" />
             </td>
         </tr>
         <tr>
@@ -53,7 +55,6 @@
                 <div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">surname error</div>
             </td>
         </tr>
-        <br>
         <tr>
             <td>
                 <label for="age">Enter age</label>
@@ -61,7 +62,6 @@
                 <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}">age error</div>
             </td>
         </tr>
-        <br>
         <tr>
             <td>
                 <label for="email">Enter email</label>
@@ -69,7 +69,6 @@
                 <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</div>
             </td>
         </tr>
-        <br>
         <tr>
             <td>
                 <input type="submit" class="buttonEdit" value="Edit user"/>
